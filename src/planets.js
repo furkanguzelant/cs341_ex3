@@ -113,6 +113,7 @@ export class SysOrbitalMovement {
 		*/
 
     const M_orbit = mat4.create();
+    mat4.identity(M_orbit);
 
     let angleZ = sim_time * actor.rotation_speed;
     let rotationZ = mat4.create();
@@ -121,8 +122,8 @@ export class SysOrbitalMovement {
     mat4.fromZRotation(rotationZ, angleZ);
 
     let M_translation = mat4.create();
-    mat4.identity(M_translation);
 
+    // Scale the unit sphere to match the desired size
     let scale = mat4.create();
     mat4.fromScaling(scale, [actor.size, actor.size, actor.size]);
 
@@ -139,18 +140,24 @@ export class SysOrbitalMovement {
 
       mat4.fromZRotation(orbit, angle);
 
+      // Translate to the orbit radius
       let translation = vec3.fromValues(actor.orbit_radius, 0, 0);
       mat4.fromTranslation(M_translation, translation);
+
+      // Combine orbit and translation
       mat4.multiply(M_orbit, orbit, M_translation);
+
+      // Get the translation vector
       let translation_v = mat4.getTranslation([0, 0, 0], M_orbit);
 
       // Add parent's translation
       vec3.add(translation_v, parent_translation_v, translation_v);
+      if (actor.name === "moon") console.log(translation_v);
       mat4.fromTranslation(M_orbit, translation_v);
     }
 
     // Store the combined transform in actor.mat_model_to_world
-    mat4_matmul_many(actor.mat_model_to_world, M_orbit, rotationZ, scale);
+    mat4_matmul_many(actor.mat_model_to_world, M_orbit, scale, rotationZ);
   }
 
   simulate(scene_info) {
