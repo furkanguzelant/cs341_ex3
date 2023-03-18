@@ -199,7 +199,7 @@ async function main() {
     console.log(up);
     // Store the combined transform in mat_turntable
     // frame_info.mat_turntable = A * B * ...
-    mat4_matmul_many(frame_info.mat_turntable, look_at, translateToTarget, rotationY, translateToTarget, rotationZ); // edit this
+    mat4_matmul_many(frame_info.mat_turntable, look_at, translateToTarget, rotationY, rotationZ); // edit this
   }
 
   update_cam_transform(frame_info);
