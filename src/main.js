@@ -185,8 +185,8 @@ async function main() {
     mat4.fromZRotation(rotationZ, cam_angle_z);
 
     
-    let translateToCamera = mat4.create();
-    mat4.fromTranslation(translateToCamera, [0, 0, 0]);
+    let translateToTarget = mat4.create();
+    mat4.fromTranslation(translateToTarget, [0, 0, 0]);
 
 
     // Example camera matrix, looking along forward-X, edit this
@@ -199,7 +199,7 @@ async function main() {
     console.log(up);
     // Store the combined transform in mat_turntable
     // frame_info.mat_turntable = A * B * ...
-    mat4_matmul_many(frame_info.mat_turntable, look_at, translateToCamera, rotationY, translateToCamera, rotationZ); // edit this
+    mat4_matmul_many(frame_info.mat_turntable, look_at, translateToTarget, rotationY, translateToTarget, rotationZ); // edit this
   }
 
   update_cam_transform(frame_info);
