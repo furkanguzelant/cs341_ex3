@@ -169,6 +169,7 @@ async function main() {
     let target = vec3.fromValues(0, 0, 0);
     let tmp = vec3.fromValues(0, 1, 0);
 
+    
     let forward = vec3.create();
     vec3.normalize(forward, vec3.subtract(forward, eye, target));
 
@@ -177,22 +178,40 @@ async function main() {
 
     let up = vec3.create();
     vec3.normalize(up, vec3.cross(up, right, forward));
-
+    
     let rotationY = mat4.create();
     mat4.fromYRotation(rotationY, cam_angle_y);
     let rotationZ = mat4.create();
     mat4.fromZRotation(rotationZ, cam_angle_z);
+
+
+
+    let temp = cam_distance_base * cam_distance_factor;
+    let idk = vec3.create();
+		vec3.set(idk, temp, 0, 0);
+		let cam_pos = vec3.create();
+    let m_rot = mat4.multiply(vec3.create, rotationY, rotationZ);
+		vec3.transformMat4(cam_pos, idk, m_rot);
+
+    
+    let translateToCamera = mat4.create();
+    mat4.fromTranslation(translateToCamera, [distance, 0, 0]);
+
+    let translateToTarget = mat4.create();
+    mat4.fromTranslation(translateToCamera, [0, 0, 0]);
+
+
     // Example camera matrix, looking along forward-X, edit this
     const look_at = mat4.lookAt(
       mat4.create(),
-      vec3.fromValues(distance, 0, 0), // camera position in world coord
+      [distance, 0, 0], // camera position in world coord
       target, // view target point
-      vec3.fromValues(0, 0, 1) // up vector
+      [0, 0, 1] // up vector
     );
     console.log(up);
     // Store the combined transform in mat_turntable
     // frame_info.mat_turntable = A * B * ...
-    mat4_matmul_many(frame_info.mat_turntable, look_at, rotationZ, rotationY); // edit this
+    mat4_matmul_many(frame_info.mat_turntable, look_at, translateToTarget, rotationY, translateToCamera, rotationZ); // edit this
   }
 
   update_cam_transform(frame_info);
