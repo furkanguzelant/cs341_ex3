@@ -184,15 +184,6 @@ async function main() {
     let rotationZ = mat4.create();
     mat4.fromZRotation(rotationZ, cam_angle_z);
 
-
-
-    let temp = cam_distance_base * cam_distance_factor;
-    let idk = vec3.create();
-		vec3.set(idk, temp, 0, 0);
-		let cam_pos = vec3.create();
-    let m_rot = mat4.multiply(vec3.create, rotationY, rotationZ);
-		vec3.transformMat4(cam_pos, idk, m_rot);
-
     
     let translateToCamera = mat4.create();
     mat4.fromTranslation(translateToCamera, [distance, 0, 0]);
