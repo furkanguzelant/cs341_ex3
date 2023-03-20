@@ -152,7 +152,7 @@ export class SysOrbitalMovement {
 
       // Add parent's translation
       vec3.add(translation_v, parent_translation_v, translation_v);
-      if (actor.name === "moon") console.log(translation_v);
+
       mat4.fromTranslation(M_orbit, translation_v);
     }
 
